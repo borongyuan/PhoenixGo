@@ -1,5 +1,25 @@
+diff --git tensorflow/lite/kernels/internal/BUILD tensorflow/lite/kernels/internal/BUILD
+index 4be3226..7226f96 100644
+--- tensorflow/lite/kernels/internal/BUILD
++++ tensorflow/lite/kernels/internal/BUILD
+@@ -22,15 +22,12 @@ HARD_FP_FLAGS_IF_APPLICABLE = select({
+ NEON_FLAGS_IF_APPLICABLE = select({
+     ":arm": [
+         "-O3",
+-        "-mfpu=neon",
+     ],
+     ":armeabi-v7a": [
+         "-O3",
+-        "-mfpu=neon",
+     ],
+     ":armv7a": [
+         "-O3",
+-        "-mfpu=neon",
+     ],
+     "//conditions:default": [
+         "-O3",
 diff --git tensorflow/workspace.bzl tensorflow/workspace.bzl
-index dff151246a..f365f557b8 100755
+index dff1512..f365f55 100755
 --- tensorflow/workspace.bzl
 +++ tensorflow/workspace.bzl
 @@ -414,11 +414,11 @@ def tf_workspace(path_prefix = "", tf_repo_name = ""):
@@ -18,8 +38,33 @@ index dff151246a..f365f557b8 100755
          ],
      )
  
+diff --git third_party/aws/BUILD.bazel third_party/aws/BUILD.bazel
+index 5426f79..e08f8fc 100644
+--- third_party/aws/BUILD.bazel
++++ third_party/aws/BUILD.bazel
+@@ -24,7 +24,7 @@ cc_library(
+         "@org_tensorflow//tensorflow:raspberry_pi_armeabi": glob([
+             "aws-cpp-sdk-core/source/platform/linux-shared/*.cpp",
+         ]),
+-        "//conditions:default": [],
++        "//conditions:default": glob(["aws-cpp-sdk-core/source/platform/linux-shared/*.cpp",]),
+     }) + glob([
+         "aws-cpp-sdk-core/include/**/*.h",
+         "aws-cpp-sdk-core/source/*.cpp",
+diff --git third_party/gpus/crosstool/BUILD.tpl third_party/gpus/crosstool/BUILD.tpl
+index db76306..184cd35 100644
+--- third_party/gpus/crosstool/BUILD.tpl
++++ third_party/gpus/crosstool/BUILD.tpl
+@@ -24,6 +24,7 @@ cc_toolchain_suite(
+         "x64_windows|msvc-cl": ":cc-compiler-windows",
+         "x64_windows": ":cc-compiler-windows",
+         "arm": ":cc-compiler-local",
++        "aarch64": ":cc-compiler-local",
+         "k8": ":cc-compiler-local",
+         "piii": ":cc-compiler-local",
+         "ppc": ":cc-compiler-local",
 diff --git third_party/tensorrt/BUILD.tpl third_party/tensorrt/BUILD.tpl
-index 57682e8735..b1c64f8477 100644
+index 57682e8..b1c64f8 100644
 --- third_party/tensorrt/BUILD.tpl
 +++ third_party/tensorrt/BUILD.tpl
 @@ -34,6 +34,38 @@ cc_library(
@@ -62,7 +107,7 @@ index 57682e8735..b1c64f8477 100644
  %{tensorrt_genrules}
  
 diff --git third_party/tensorrt/tensorrt_configure.bzl third_party/tensorrt/tensorrt_configure.bzl
-index 9b946505a6..61b8f00bff 100644
+index 9b94650..61b8f00 100644
 --- third_party/tensorrt/tensorrt_configure.bzl
 +++ third_party/tensorrt/tensorrt_configure.bzl
 @@ -19,8 +19,8 @@ load(
