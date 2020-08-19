@@ -26,11 +26,7 @@ if [[ -z $config ]]; then
             echo "mcts_main wasn't built with TensorRT support" >&2
         fi
 
-        num_gpu=0
-        if [[ $has_cuda == "0" ]]; then
-            num_gpu=`nvidia-smi -L | wc -l`
-            echo "found $num_gpu GPU(s)" >&2
-        fi
+        num_gpu=1
 
         if [[ $has_cuda == "0" && $num_gpu -gt 0 ]]; then
             if [[ $has_tensorrt == "0" ]]; then

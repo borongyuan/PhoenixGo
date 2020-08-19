@@ -28,8 +28,8 @@
 #include "tensorrt/include/NvUffParser.h"
 
 DEFINE_string(model_path, "", "Path of model.");
-DEFINE_string(data_type, "FP32", "Data type to build, FP32 or FP16.");
-DEFINE_int32(max_batch_size, 4, "Max size for input batch.");
+DEFINE_string(data_type, "FP16", "Data type to build, FP32 or FP16.");
+DEFINE_int32(max_batch_size, 8, "Max size for input batch.");
 DEFINE_int32(max_workspace_size, 1<<30, "Parameter to control memory allocation (in bytes).");
 DEFINE_int32(calib_iterations, 10000, "Num of iterations to run while calibration.");
 DEFINE_string(storage_address, "", "Address of wegostorage");
@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
 
     IUffParser *parser = createUffParser();
     parser = createUffParser();
-    parser->registerInput("inputs", DimsCHW(19, 19, 17));
+    parser->registerInput("inputs", DimsCHW(19, 19, 17), UffInputOrder::kNCHW);
     parser->registerOutput("policy");
     parser->registerOutput("value");
 
